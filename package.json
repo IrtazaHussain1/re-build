@@ -1,0 +1,14 @@
+{
+  "name": "re-build",
+  "version": "1.0.0",
+  "description": "Apply Online via tailored resume and cover letter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nest start && next start",
+    "start-client": "next start",
+    "start-server": "nest start"
+  },
+  "author": "Irtaza Hussain",
+  "license": "ISC"
+}
