@@ -1,26 +1,34 @@
-import {
-  Injectable,
-  NestMiddleware,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { Request, Response, NextFunction } from 'express';
 
 @Injectable()
-export class JwtAuthMiddleware implements NestMiddleware {
-  constructor(private jwtService: JwtService) {}
+export class JwtMiddleware implements NestMiddleware {
+  constructor(
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
 
-  use(req: any, res: any, next: () => void) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      throw new UnauthorizedException('Authorization header missing');
-    }
-
-    const token = authHeader.split(' ')[1];
-    try {
-      req.user = this.jwtService.verify(token);
+  use(req: Request, res: Response, next: NextFunction) {
+    const token = this.extractTokenFromHeader(req);
+    if (!token) {
       next();
-    } catch (err) {
-      throw new UnauthorizedException('Invalid token');
+      return;
     }
+    try {
+      const payload = this.jwtService.verify(token, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+      });
+      req['user'] = payload;
+      next();
+    } catch {
+      next();
+    }
+  }
+
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

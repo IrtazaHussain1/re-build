@@ -5,10 +5,17 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nest start && next start",
-    "start-client": "next start",
-    "start-server": "nest start"
+    "start": "concurrently \"npm run start-server\" \"npm run start-client\"",
+    "start-client": "cd re-build-client && npm run start",
+    "start-server": "cd re-build-server && npm run start",
+    "dev": "concurrently \"npm run dev-server\" \"npm run dev-client\"",
+    "dev-client": "cd re-build-client && npm run dev",
+    "dev-server": "cd re-build-server && npm run start:dev",
+    "install-all": "npm install && cd re-build-client && npm install && cd ../re-build-server && npm install"
   },
   "author": "Irtaza Hussain",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.7.6"
+  }
 }

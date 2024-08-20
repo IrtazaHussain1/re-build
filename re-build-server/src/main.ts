@@ -26,7 +26,6 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-      // @TODO maybe disable strong validation
       forbidNonWhitelisted: true,
       forbidUnknownValues: true,
       whitelist: true,
@@ -40,6 +39,17 @@ async function bootstrap() {
     .setTitle('Re Build')
     .setDescription('Re Build Application')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth', // This name here is important for matching up with @ApiBearerAuth() in your controller!
+    )
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(`${config.prefix}/api`, app, document);
