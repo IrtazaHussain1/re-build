@@ -21,7 +21,7 @@ export function Signup() {
         <h1 className="text-3xl font-bold tracking-tight">Sign Up</h1>
         <p className="mt-2 text-muted-foreground">
           Already have an account?{" "}
-          <Link href="#" className="font-medium text-primary hover:underline" prefetch={false}>
+          <Link href="/signin" className="font-medium text-primary hover:underline" prefetch={false}>
             Sign in
           </Link>
         </p>
