@@ -14,6 +14,9 @@ import { UserModule } from './user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtMiddleware } from './middleware/jwt-auth.middleware';
+import { UserSettingsModule } from './user-settings/user-settings.module';
+import { JobApplicationModule } from './job-application/job-application.module';
+import { BaseEntityListener } from './middleware/base-entity.middleware';
 
 @Module({
   imports: [
@@ -37,9 +40,11 @@ import { JwtMiddleware } from './middleware/jwt-auth.middleware';
     }),
     TerminusModule,
     UserModule,
+    UserSettingsModule,
+    JobApplicationModule,
   ],
   controllers: [AppController],
-  providers: [AppService, JwtMiddleware],
+  providers: [AppService, JwtMiddleware, BaseEntityListener],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

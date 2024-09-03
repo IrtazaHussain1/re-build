@@ -35,4 +35,9 @@ export class AppController {
         }),
     ]);
   }
+
+  @Get('')
+  homepage(): any {
+    return { message: 'Welcome to Re-Build App.' };
+  }
 }

@@ -1,16 +1,45 @@
 "use client"
+
 import Link from "next/link";
 import { useState } from "react"
+import { redirect, useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../store/authSlice';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
+import { apiRequest } from "@/utils/api";
+
 export function Signin() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: any) => {
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
+    await handleLogin();
+  }
+  const handleLogin = async () => {
+    try {
+      const data = await apiRequest('user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      dispatch(loginSuccess({ user: {email: data.email}, token: data.access_token }));
+      localStorage.setItem('token', data.access_token);
+      router.push('/');
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Invalid email or password');
+    }
   }
 
   return (
@@ -23,7 +52,7 @@ export function Signin() {
           <p className="mt-2 text-muted-foreground">
             Don&apos;t have an account?{" "}
             <Link
-              href="#"
+              href="/signup"
               className="font-medium text-primary hover:underline"
               prefetch={false}
             >
@@ -55,8 +84,9 @@ export function Signin() {
             <LockIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           </div>
           <Button type="submit" className="w-full">
-            Sign Up
+            Sign In
           </Button>
+          {error && <p>{error}</p>}
         </form>
       </div>
     </Card>

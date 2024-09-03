@@ -29,9 +29,9 @@ export class User {
   @Column({ type: 'bytea', nullable: true })
   defaultResume: Buffer;
 
+  @OneToOne(() => UserSettings, (userSettings) => userSettings.user)
+  userSettings: UserSettings;
+
   @OneToMany(() => JobApplication, (jobApplication) => jobApplication.user)
   jobApplications: JobApplication[];
-
-  @OneToOne(() => UserSettings, (userSetting) => userSetting.user)
-  userSetting: UserSettings;
 }
