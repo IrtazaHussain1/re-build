@@ -33,7 +33,7 @@ export function Applications() {
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell>Acme Inc</TableCell>
+              <TableCell>Acme Inc.</TableCell>
               <TableCell>Software Engineer</TableCell>
               <TableCell>jobs@acme.com</TableCell>
               <TableCell>2023-08-01</TableCell>
